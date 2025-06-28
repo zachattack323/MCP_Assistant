@@ -6,54 +6,62 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var servers: [MCPServer] = []
+
+    private var groupedIndices: [String: [Int]] {
+        Dictionary(grouping: servers.indices, by: { servers[$0].app })
+    }
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                ForEach(groupedIndices.keys.sorted(), id: \._self) { app in
+                    Section(app) {
+                        ForEach(groupedIndices[app]!, id: \._self) { index in
+                            Toggle(servers[index].name, isOn: $servers[index].enabled)
+                        }
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
             .navigationSplitViewColumnWidth(min: 180, ideal: 200)
             .toolbar {
                 ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    Button(action: addServer) {
+                        Label("Add Server", systemImage: "plus")
                     }
                 }
             }
+            .onChange(of: servers) { _ in
+                saveServers()
+            }
+            .onAppear(perform: loadServers)
         } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+            if servers.isEmpty {
+                Text("No servers configured.")
+                    .padding()
+            } else {
+                Text("Toggle servers to enable or disable them for Claude.")
+                    .padding()
             }
         }
+    }
+
+    private func loadServers() {
+        servers = ServerStore.load()
+    }
+
+    private func saveServers() {
+        ServerStore.save(servers)
+    }
+
+    private func addServer() {
+        servers.append(MCPServer(app: "General", name: "New Server", enabled: false))
+        saveServers()
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
