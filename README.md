@@ -17,7 +17,7 @@ MCP Assistant provides a convenient way to quickly enable or disable specific MC
 * **Clear Status:** Quickly see which MCP servers are currently active for Claude.
 * **Lightweight:** Designed to be simple and resource-efficient.
 
-##  M️ Installation
+## 🛠 Installation
 
 **Option 1: Download Release (Recommended)**
 
@@ -34,28 +34,32 @@ MCP Assistant provides a convenient way to quickly enable or disable specific MC
     git clone [your-repo-link]
     cd mcp-assistant
     ```
-2.  Open the project in Xcode. 3.  Build the application (Product > Build).
-4.  Find the built `MCP Assistant.app` in the Products directory and move it to your `/Applications` folder.
+2.  Open the project in Xcode and build the application (Product > Build).
+3.  Find the built `MCP Assistant.app` in the Products directory and move it to your `/Applications` folder.
+
+A small command-line utility is also provided. You can build it with:
+```bash
+swift build -c release
+```
+The executable `mcp-assistant-cli` will appear in `.build/release`.
 
 ## 🚀 Usage
 
 1.  Launch MCP Assistant. Its icon will appear in your macOS menu bar.
-2.  Click the menu bar icon. A dropdown list will show the detected/configured MCP servers.
-3.  Each server will have an indicator (e.g., a checkmark, toggle switch) showing if it's currently enabled or disabled.
+2.  Click the menu bar icon. A dropdown list will show the detected/configured MCP servers grouped by application.
+3.  Each server will have an indicator (toggle) showing if it's currently enabled or disabled.
 4.  Click on a server name or its toggle to switch its state (enable/disable it).
 5.  The changes take effect immediately for subsequent interactions with Claude (assuming Claude reads the configuration MCP Assistant modifies).
 
 ## ⚙️ Configuration
 
-MCP Assistant currently detects servers based on [explain mechanism - e.g., a specific configuration file (`~/.mcp_servers.json`), environment variables, or a hardcoded list?].
+MCP Assistant loads servers from `~/.config/mcp_assistant/servers.json`. Edit this file to customize the tools you want to toggle.
 
-* **[Explain how users add/remove/edit servers if applicable]**
-* **[Mention any required setup steps]**
-
-*Example using a config file:*
-The app looks for a JSON file at `~/.config/mcp_assistant/servers.json`. The format should be:
+Example configuration:
 ```json
 [
-  { "name": "My First Server", "id": "server_one", "enabled": true },
-  { "name": "Another Tool", "id": "tool_two", "enabled": false }
+  { "app": "Claude", "name": "Default", "enabled": true },
+  { "app": "ChatGPT", "name": "Research", "enabled": false }
 ]
+```
+The file will be created automatically the first time you launch the app if it does not exist. Changes are written back whenever you toggle a server.
