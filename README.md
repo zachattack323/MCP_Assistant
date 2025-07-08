@@ -1,6 +1,8 @@
 # MCP Assistant
 
-[![macOS](https://img.shields.io/badge/macOS-11.0%2B-blue)](https://www.apple.com/macos) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) A simple macOS menu bar application for managing Meta-Cognitive Prompting (MCP) servers/tools for Claude.
+[![macOS](https://img.shields.io/badge/macOS-26.0%2B-blue)](https://www.apple.com/macos) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) A simple macOS menu bar application for managing Meta-Cognitive Prompting (MCP) servers/tools for Claude.
+
+Requires macOS 26 or later.
 
 *Screenshot placeholder: Add an image or GIF of your app's menu bar interface.*
 
